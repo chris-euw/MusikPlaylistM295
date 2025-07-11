@@ -1,11 +1,14 @@
 package com.christopher.musikplaylistappchristopher.service;
 
+import com.christopher.musikplaylistappchristopher.dto.FilterDTO;
 import com.christopher.musikplaylistappchristopher.model.Playlist;
 import com.christopher.musikplaylistappchristopher.model.Song;
 import com.christopher.musikplaylistappchristopher.repository.PlaylistRepository;
 import com.christopher.musikplaylistappchristopher.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 public class PlaylistSongService {
@@ -16,7 +19,7 @@ public class PlaylistSongService {
     @Autowired
     private SongRepository songRepository;
 
-    public Playlist addSongToPlaylist(String playlistId, String songId) {
+    public Playlist addSongToPlaylist(String playlistId, String songId, FilterDTO filterDTO) {
         Playlist playlist = playlistRepository.findById(playlistId)
                 .orElseThrow(() -> new RuntimeException("Playlist not found"));
         Song song = songRepository.findById(songId)

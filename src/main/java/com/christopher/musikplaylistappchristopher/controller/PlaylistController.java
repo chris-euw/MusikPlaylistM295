@@ -1,9 +1,11 @@
 package com.christopher.musikplaylistappchristopher.controller;
 
+import com.christopher.musikplaylistappchristopher.dto.FilterDTO;
 import com.christopher.musikplaylistappchristopher.model.Playlist;
 import com.christopher.musikplaylistappchristopher.repository.PlaylistRepository;
 import com.christopher.musikplaylistappchristopher.service.PlaylistSongService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,12 +33,14 @@ public class PlaylistController {
     }
 
     // 3. Song zur Playlist hinzufügen (vereinfacht)
-    @PostMapping("/{playlistId}/songs")
-    public Playlist addSongToPlaylist(
+    @PostMapping("/playlists/{playlistId}/songs/{songId}")
+    public ResponseEntity<Playlist> addSongToPlaylist(
             @PathVariable String playlistId,
-            @RequestBody String songId // Akzeptiert nur die Song-ID als String
+            @PathVariable String songId,
+            @RequestBody(required = false) FilterDTO filterDTO // optional
     ) {
-        return playlistSongService.addSongToPlaylist(playlistId, songId);
+        Playlist updated = playlistSongService.addSongToPlaylist(playlistId, songId, filterDTO);
+        return ResponseEntity.ok(updated);
     }
 
     // 4. Playlist löschen

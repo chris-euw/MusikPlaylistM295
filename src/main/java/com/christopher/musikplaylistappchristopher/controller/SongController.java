@@ -5,6 +5,7 @@ import java.util.List;
 import com.christopher.musikplaylistappchristopher.model.Song;
 import com.christopher.musikplaylistappchristopher.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,6 +27,11 @@ public class SongController {
         return songRepository.save(song);
     }
 
+    @PostMapping("/batch")
+    public List<Song> createSongs(@RequestBody List<Song> songs) {
+        return songRepository.saveAll(songs);
+    }
+
     // 3. Song nach Titel suchen
     @GetMapping("/search")
     public List<Song> searchSongs(@RequestParam(required = false) String title,
@@ -41,6 +47,12 @@ public class SongController {
     @DeleteMapping("/{id}")
     public void deleteSong(@PathVariable String id) {
         songRepository.deleteById(id);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteSongs(@RequestBody List<String> ids) {
+        songRepository.deleteAllById(ids);
+        return ResponseEntity.noContent().build();
     }
 
     // 5. Song bearbeiten (optional)

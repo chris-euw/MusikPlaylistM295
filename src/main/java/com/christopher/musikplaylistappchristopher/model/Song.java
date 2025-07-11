@@ -43,34 +43,4 @@ public class Song {
         this.album = album;
         this.duration = duration;
     }
-
-    //Getter & Setter für Playlist Attribute
-    public int getDuration() {
-        return duration;}
-    public void setDuration(int duration) {
-        this.duration = duration;}
-
-
-    public String getAlbum() {
-        return album;}
-    public void setAlbum(String album) {
-        this.album = album;}
-
-
-    public String getArtist() {
-        return artist;}
-    public void setArtist(String artist) {
-        this.artist = artist;}
-
-
-    public String getTitle() {
-        return title;}
-    public void setTitle(String title) {
-        this.title = title;}
-
-
-    public String getSongID() {
-        return songID;}
-    public void setSongID(String songID) {
-        this.songID = songID;}
 }

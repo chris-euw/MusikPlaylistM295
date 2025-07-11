@@ -1,4 +1,4 @@
-package com.christopher.musikplaylistappchristopher;
+package com.christopher.musikplaylistappchristopher.exceptionhandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

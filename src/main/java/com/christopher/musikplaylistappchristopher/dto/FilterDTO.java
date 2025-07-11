@@ -7,19 +7,27 @@ public class FilterDTO {
 
     // Getter & Setter
     public String getTitle() {
-        return title;}
+        return title;
+    }
+
     public void setTitle(String title) {
-        this.title = title;}
-
-
-    public String getAlbum() {
-        return album;}
-    public void setAlbum(String album) {
-        this.album = album;}
-
+        this.title = title;
+    }
 
     public String getArtist() {
-        return artist;}
+        return artist;
+    }
+
     public void setArtist(String artist) {
-        this.artist = artist;}
+        this.artist = artist;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
 }
