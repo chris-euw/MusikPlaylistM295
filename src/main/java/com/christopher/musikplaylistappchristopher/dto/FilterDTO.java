@@ -1,6 +1,6 @@
 package com.christopher.musikplaylistappchristopher.dto;
 
-public class FIlterDTO {
+public class FilterDTO {
     private String title;
     private String artist;
     private String album;

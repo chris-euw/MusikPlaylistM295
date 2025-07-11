@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Entity //@Entity macht die Klasse Playlist als Datenbank-Tabelle
 public class Playlist {
@@ -21,16 +22,24 @@ public class Playlist {
     // Zeigt auf den Benutzer dem diese Playlist gehört **
     // @ManyToOne bedeutet viele Playlists können zu einem Benutzer gehören **
     @ManyToMany
+    @JoinTable(
+            name = "playlist_song",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
     private List<Song> songs;
-    @ManyToOne
-    private User user;
 
     //Default Playlist Konstruktor (parameterloser Konstruktor
     public Playlist() {}
 
+    @PrePersist
+    protected void onCreate() {
+        this.playlistCreation = LocalDate.now();
+    }
+
     //Konstruktoren für die direkte erzeugung mit allen Playlist Attribute
     public Playlist(String playlistID, String playlistName, LocalDate playlistCreation, String playlistDescription, boolean privacyState) {
-        this.playlistID = playlistID;
+        this.playlistID = UUID.randomUUID().toString();
         this.playlistName = playlistName;
         this.playlistCreation = LocalDate.now(); //setzt automatisch das heutige Datum
         this.playlistDescription = playlistDescription;
