@@ -1,75 +1,72 @@
 package com.christopher.musikplaylistappchristopher.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity //@Entity macht die Klasse Playlist als Datenbank-Tabelle
+@Entity
 public class Playlist {
 
-
-    //Playlist Attribute
-    @Id //@ID markiert das Feld als Primärschlüssel
-    @GeneratedValue(strategy = GenerationType.UUID) //Erstellt eine automatische ID (UUID beispiel: 'b8fa00a8-2cb4-4f1e-bb5f-5c4557ff7e8d'
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(updatable = false, length = 36)
     private String playlistID;
+
+    @Column(nullable = false)
     private String playlistName;
+
+    @Column(updatable = false)
     private LocalDate playlistCreation;
+
     private String playlistDescription;
-    private boolean privacyState; //true = privat, false = öffentlich
 
-    // Zeigt auf den Benutzer dem diese Playlist gehört **
-    // @ManyToOne bedeutet viele Playlists können zu einem Benutzer gehören **
+    private boolean privacyState;
+
     @ManyToMany
+    @JoinTable(
+            name = "playlist_song",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
     private List<Song> songs;
-    @ManyToOne
-    private User user;
 
-    //Default Playlist Konstruktor (parameterloser Konstruktor
-    public Playlist() {}
+    public Playlist() {
+    }
 
-    //Konstruktoren für die direkte erzeugung mit allen Playlist Attribute
-    public Playlist(String playlistID, String playlistName, LocalDate playlistCreation, String playlistDescription, boolean privacyState) {
-        this.playlistID = playlistID;
+    // Vereinfachter Konstruktor ohne ID
+    public Playlist(String playlistName, String playlistDescription, boolean privacyState) {
         this.playlistName = playlistName;
-        this.playlistCreation = LocalDate.now(); //setzt automatisch das heutige Datum
         this.playlistDescription = playlistDescription;
         this.privacyState = privacyState;
     }
 
-    //Getter & Setter für Playlist Attribute
-    public String getPlaylistID() {
-        return playlistID;}
-    public void setPlaylistID(String playlistID) {
-        this.playlistID = playlistID;}
+    @PrePersist
+    protected void onCreate() {
+        this.playlistCreation = LocalDate.now();
+    }
 
+    // Getter & Setter (Behalten Sie diese bei oder verwenden Sie Lombok)
+    public String getPlaylistID() { return playlistID; }
+    public void setPlaylistID(String playlistID) { this.playlistID = playlistID; }
 
-    public String getPlaylistName() {
-        return playlistName;}
-    public void setPlaylistName(String playlistName) {
-        this.playlistName = playlistName;}
+    public String getPlaylistName() { return playlistName; }
+    public void setPlaylistName(String playlistName) { this.playlistName = playlistName; }
 
+    public LocalDate getPlaylistCreation() { return playlistCreation; }
+    public void setPlaylistCreation(LocalDate playlistCreation) { this.playlistCreation = playlistCreation; }
 
-    public LocalDate getPlaylistCreation() {
-        return playlistCreation;}
-    public void setPlaylistCreation(LocalDate playlistCreation) {
-        this.playlistCreation = playlistCreation;}
+    public String getPlaylistDescription() { return playlistDescription; }
+    public void setPlaylistDescription(String playlistDescription) { this.playlistDescription = playlistDescription; }
 
+    public boolean isPrivacyState() { return privacyState; }
+    public void setPrivacyState(boolean privacyState) { this.privacyState = privacyState; }
 
-    public String getPlaylistDescription() {
-        return playlistDescription;}
-    public void setPlaylistDescription(String playlistDescription) {
-        this.playlistDescription = playlistDescription;}
-
-
-    public boolean isPrivacyState() {
-        return privacyState;}
-    public void setPrivacyState(boolean privacyState) {
-        this.privacyState = privacyState;}
-
-    public List<Song> getSongs() {
-        return songs;}
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;}
-
+    public List<Song> getSongs() { return songs; }
+    public void setSongs(List<Song> songs) { this.songs = songs; }
 }
