@@ -1,19 +1,31 @@
 package com.christopher.musikplaylistappchristopher.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.swing.text.TabExpander;
 import java.util.List;
+import java.util.UUID;
 
-@Entity //@Entity macht die Klasse Song als Datenbank-Tabelle
+@Entity//@Entity macht die Klasse Song als Datenbank-Tabelle
+@Data
+@Table(name ="SONG")
 public class Song {
 
     //Song Attribute
-    @Id //@Id markiert das Feld songID als Primärschlüssel
-    @GeneratedValue(strategy = GenerationType.UUID) //Erstellt eine automatische ID (UUID beispiel: 'b8fa00a8-2cb4-4f1e-bb5f-5c4557ff7e8d'
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(generator = "UUID")//@Id markiert das Feld songID als Primärschlüssel
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String songID;
+    @Column(name = "TiTLE")
     private String title;
+    @Column(name = "ARTIST")
     private String artist;
+    @Column(name = "ALBUM")
     private String album;
+    @Column(name = "DURATION")
     private int duration; //dauer in sekunden
 
     // Die Zuordnung wird über die Playlist-Klasse verwaltet ("mappedBy"). **
@@ -25,8 +37,7 @@ public class Song {
     public Song() {}
 
     //Konstruktoren für die direkte erzeugung mit allen Song Attribute
-    public Song(String songID, String title, String artist, String album, Integer duration) {
-        this.songID = songID;
+    public Song(String title, String artist, String album, int duration) {
         this.title = title;
         this.artist = artist;
         this.album = album;
@@ -34,9 +45,9 @@ public class Song {
     }
 
     //Getter & Setter für Playlist Attribute
-    public Integer getDuration() {
+    public int getDuration() {
         return duration;}
-    public void setDuration(Integer duration) {
+    public void setDuration(int duration) {
         this.duration = duration;}
 
 
@@ -62,5 +73,4 @@ public class Song {
         return songID;}
     public void setSongID(String songID) {
         this.songID = songID;}
-
 }
