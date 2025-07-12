@@ -15,44 +15,48 @@ import java.util.List;
 public class PlaylistController {
 
     @Autowired
-    private PlaylistSongService playlistSongService;
+    private PlaylistSongService playlistSongService; // Service für Song-Hinzufügen
 
     @Autowired
-    private PlaylistRepository playlistRepository;
+    private PlaylistRepository playlistRepository; // CRUD für Playlists
 
-    // 1. Alle Playlists abrufen
+    // GET /api/playlists
     @GetMapping
     public List<Playlist> getAllPlaylists() {
+        // repository.findAll aufgerufen
         return playlistRepository.findAll();
     }
 
-    // 2. Neue Playlist erstellen
+    // POST /api/playlists
     @PostMapping
     public Playlist createPlaylist(@RequestBody Playlist playlist) {
+        // repository.save aufgerufen
         return playlistRepository.save(playlist);
     }
 
-    // 3. Song zur Playlist hinzufügen (vereinfacht)
-    @PostMapping("/playlists/{playlistId}/songs/{songId}")
+    // POST /api/playlists/{playlistId}/songs/{songId}
+    @PostMapping("/{playlistId}/songs/{songId}")
     public ResponseEntity<Playlist> addSongToPlaylist(
             @PathVariable String playlistId,
             @PathVariable String songId,
-            @RequestBody(required = false) FilterDTO filterDTO // optional
-    ) {
+            @RequestBody(required = false) FilterDTO filterDTO) {
+        // Service wird aufgerufen
         Playlist updated = playlistSongService.addSongToPlaylist(playlistId, songId, filterDTO);
         return ResponseEntity.ok(updated);
     }
 
-    // 4. Playlist löschen
+    // DELETE /api/playlists/{id}
     @DeleteMapping("/{id}")
     public void deletePlaylist(@PathVariable String id) {
+        // repository.deleteById aufgerufen
         playlistRepository.deleteById(id);
     }
 
-    // 5. Playlist bearbeiten (einfaches Update)
+    // PUT /api/playlists/{id}
     @PutMapping("/{id}")
     public Playlist updatePlaylist(@PathVariable String id, @RequestBody Playlist playlist) {
-        playlist.setPlaylistID(id); // ID setzen
+        // ID gesetzt und repository.save aufgerufen
+        playlist.setPlaylistID(id);
         return playlistRepository.save(playlist);
     }
 }

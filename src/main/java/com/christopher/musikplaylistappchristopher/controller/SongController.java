@@ -13,52 +13,38 @@ import org.springframework.web.bind.annotation.*;
 public class SongController {
 
     @Autowired
-    private SongRepository songRepository;
+    private SongRepository songRepository; // CRUD für Songs
 
-    // 1. Alle Songs anzeigen
+    // GET /api/songs
     @GetMapping
     public List<Song> getAllSongs() {
-        return songRepository.findAll();
+        return songRepository.findAll(); // repository.findAll
     }
 
-    // 2. Song erstellen
+    // GET /api/songs/{id}
+    @GetMapping("/{id}")
+    public Song getSongById(@PathVariable String id) {
+        return songRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Song not found"));
+    }
+
+    // POST /api/songs
     @PostMapping
     public Song createSong(@RequestBody Song song) {
-        return songRepository.save(song);
+        return songRepository.save(song); // repository.save
     }
 
-    @PostMapping("/batch")
-    public List<Song> createSongs(@RequestBody List<Song> songs) {
-        return songRepository.saveAll(songs);
-    }
-
-    // 3. Song nach Titel suchen
-    @GetMapping("/search")
-    public List<Song> searchSongs(@RequestParam(required = false) String title,
-                                  @RequestParam(required = false) String artist,
-                                  @RequestParam(required = false) String album) {
-        if (title != null) return songRepository.findByTitleContainingIgnoreCase(title);
-        if (artist != null) return songRepository.findByArtistContainingIgnoreCase(artist);
-        if (album != null) return songRepository.findByAlbumContainingIgnoreCase(album);
-        return songRepository.findAll(); // fallback
-    }
-
-    // 4. Song löschen
-    @DeleteMapping("/{id}")
-    public void deleteSong(@PathVariable String id) {
-        songRepository.deleteById(id);
-    }
-
+    // DELETE /api/songs
     @DeleteMapping
     public ResponseEntity<Void> deleteSongs(@RequestBody List<String> ids) {
-        songRepository.deleteAllById(ids);
+        songRepository.deleteAllById(ids); // repository.deleteAllById
         return ResponseEntity.noContent().build();
     }
 
-    // 5. Song bearbeiten (optional)
+    // PUT /api/songs/{id}
     @PutMapping("/{id}")
     public Song updateSong(@PathVariable String id, @RequestBody Song song) {
-        song.setSongID(id);
-        return songRepository.save(song);
+        song.setSongID(id); // ID beibehalten
+        return songRepository.save(song); // repository.save
     }
 }

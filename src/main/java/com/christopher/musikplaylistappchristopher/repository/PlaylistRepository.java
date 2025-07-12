@@ -6,7 +6,6 @@ import java.util.List;
 
 
 public interface PlaylistRepository extends JpaRepository<Playlist, String> {
-
     List<Playlist> findByPlaylistNameContainingIgnoreCase(String name);
-
+    // Aufruf: optional im Controller erweitern für Suchfunktion
 }

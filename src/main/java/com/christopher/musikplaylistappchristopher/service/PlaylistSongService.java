@@ -10,26 +10,32 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
-@Service
+@Service // Business-Logik
 public class PlaylistSongService {
 
     @Autowired
-    private PlaylistRepository playlistRepository;
+    private PlaylistRepository playlistRepository; // Aufgerufen in addSongToPlaylist
 
     @Autowired
-    private SongRepository songRepository;
+    private SongRepository songRepository; // Aufgerufen in addSongToPlaylist
 
+    /**
+     * Fügt einen Song einer Playlist hinzu.
+     * Aufgerufen von: PlaylistController.addSongToPlaylist
+     */
     public Playlist addSongToPlaylist(String playlistId, String songId, FilterDTO filterDTO) {
         Playlist playlist = playlistRepository.findById(playlistId)
                 .orElseThrow(() -> new RuntimeException("Playlist not found"));
+        // Exception von GlobalExceptionHandler in HTTP 404 übersetzt
+
         Song song = songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("Song not found"));
 
         if (!playlist.getSongs().contains(song)) {
-            playlist.getSongs().add(song);
+            playlist.getSongs().add(song); // Verhältnis aktualisieren
         }
 
-        return playlistRepository.save(playlist);
+        return playlistRepository.save(playlist); // Persistenz durch Repository
     }
 }
 
