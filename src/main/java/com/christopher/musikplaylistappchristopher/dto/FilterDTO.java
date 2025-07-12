@@ -1,11 +1,11 @@
 package com.christopher.musikplaylistappchristopher.dto;
 
 public class FilterDTO {
-    private String title;
-    private String artist;
-    private String album;
+    private String title;  // Übergabe optionaler Suchfilter
+    private String artist; // Derzeit ungenutzt in Service
+    private String album;  // Derzeit ungenutzt
 
-    // Getter & Setter
+    // Getter/Setter: JSON-Mapping im Controller
     public String getTitle() {
         return title;
     }

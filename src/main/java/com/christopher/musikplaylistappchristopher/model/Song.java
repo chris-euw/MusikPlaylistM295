@@ -8,39 +8,79 @@ import javax.swing.text.TabExpander;
 import java.util.List;
 import java.util.UUID;
 
-@Entity//@Entity macht die Klasse Song als Datenbank-Tabelle
-@Data
-@Table(name ="SONG")
+@Entity
+@Data // Lombok generiert Getter, Setter etc.
+@Table(name = "SONG")
 public class Song {
-
-    //Song Attribute
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(generator = "UUID")//@Id markiert das Feld songID als Primärschlüssel
+    @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private String songID;
-    @Column(name = "TiTLE")
-    private String title;
-    @Column(name = "ARTIST")
-    private String artist;
-    @Column(name = "ALBUM")
-    private String album;
-    @Column(name = "DURATION")
-    private int duration; //dauer in sekunden
+    private String songID;   // ID wird in createSong und updateSong gesetzt
 
-    // Die Zuordnung wird über die Playlist-Klasse verwaltet ("mappedBy"). **
-    // Diese Seite ist die inverse Seite der Many-to-Many-Beziehung. **
-    @ManyToMany(mappedBy = "songs")
-    private List<Playlist> playlists;
+    private String title;    // Feld für JSON-Serialisierung und Suchmethoden
+    private String artist;   // Feld für Suchmethoden
+    private String album;    // Feld für Suchmethoden
+    private int duration;    // Spieldauer in Sekunden
 
-    //Default Song Konstruktor (parameterloser Konstruktor)
-    public Song() {}
+    @ManyToMany(mappedBy = "songs") // Inverse Seite der Relation
+    private List<Playlist> playlists; // Befüllt automatisch bei Fetch
 
-    //Konstruktoren für die direkte erzeugung mit allen Song Attribute
+    public Song() { }
+
     public Song(String title, String artist, String album, int duration) {
+        // Konstruktor genutzt in Service oder Tests
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
     }
+
+    public String getSongID() {
+        return songID;
+    }
+
+    public void setSongID(String songID) {
+        this.songID = songID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
+    }
 }
+

@@ -6,52 +6,28 @@ import org.hibernate.annotations.GenericGenerator;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+@Entity // JPA-Entity für Playlists
 public class Playlist {
+    @Id // Primärschlüssel
+    @GeneratedValue(generator = "UUID") // Generiert UUIDs
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private String playlistID; // Wird gesetzt in createPlaylist und in updatePlaylist
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(updatable = false, length = 36)
-    private String playlistID;
+    private String playlistName;        // Eingabe im createPlaylist (PlaylistController)
+    private LocalDate playlistCreation; // Setzung im Controller oder DTO
+    private String playlistDescription; // Eingabe im create/Update
+    private boolean privacyState;       // Eingabe im create/Update
 
-    @Column(nullable = false)
-    private String playlistName;
-
-    @Column(updatable = false)
-    private LocalDate playlistCreation;
-
-    private String playlistDescription;
-
-    private boolean privacyState;
-
-    @ManyToMany
+    @ManyToMany // Relation zu Songs
     @JoinTable(
-            name = "playlist_song",
+            name = "playlist_songs",
             joinColumns = @JoinColumn(name = "playlist_id"),
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
-    private List<Song> songs;
 
-    public Playlist() {
-    }
+    // Getter/Setter: genutzt in PlaylistController, PlaylistSongService und Repository
 
-    // Vereinfachter Konstruktor ohne ID
-    public Playlist(String playlistName, String playlistDescription, boolean privacyState) {
-        this.playlistName = playlistName;
-        this.playlistDescription = playlistDescription;
-        this.privacyState = privacyState;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.playlistCreation = LocalDate.now();
-    }
-
-    // Getter & Setter (Behalten Sie diese bei oder verwenden Sie Lombok)
+    private List<Song> songs; // Befüllt durch addSongToPlaylist (PlaylistSongService)
     public String getPlaylistID() { return playlistID; }
     public void setPlaylistID(String playlistID) { this.playlistID = playlistID; }
 
