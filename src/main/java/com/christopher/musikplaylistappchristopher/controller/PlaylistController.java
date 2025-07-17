@@ -6,6 +6,7 @@ import com.christopher.musikplaylistappchristopher.repository.PlaylistRepository
 import com.christopher.musikplaylistappchristopher.service.PlaylistSongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,10 +46,10 @@ public class PlaylistController {
         return ResponseEntity.ok(updated);
     }
 
-    // DELETE /api/playlists/{id}
     @DeleteMapping("/{id}")
+    @Transactional
     public void deletePlaylist(@PathVariable String id) {
-        // repository.deleteById aufgerufen
+        playlistRepository.deletePlaylistSongRelations(id);
         playlistRepository.deleteById(id);
     }
 

@@ -5,6 +5,7 @@ import com.christopher.musikplaylistappchristopher.model.Playlist;
 import com.christopher.musikplaylistappchristopher.model.Song;
 import com.christopher.musikplaylistappchristopher.repository.PlaylistRepository;
 import com.christopher.musikplaylistappchristopher.repository.SongRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class PlaylistSongService {
      * Fügt einen Song einer Playlist hinzu.
      * Aufgerufen von: PlaylistController.addSongToPlaylist
      */
+    @Transactional
     public Playlist addSongToPlaylist(String playlistId, String songId, FilterDTO filterDTO) {
         Playlist playlist = playlistRepository.findById(playlistId)
                 .orElseThrow(() -> new RuntimeException("Playlist not found"));
