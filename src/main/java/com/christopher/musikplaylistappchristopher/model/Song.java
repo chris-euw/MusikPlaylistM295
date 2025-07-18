@@ -1,5 +1,7 @@
 package com.christopher.musikplaylistappchristopher.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -13,8 +15,8 @@ import java.util.UUID;
 @Table(name = "SONG")
 public class Song {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "songid", updatable = false, nullable = false)
     private String songID;
 
@@ -23,7 +25,8 @@ public class Song {
     private String album;    // Feld für Suchmethoden
     private int duration;    // Spieldauer in Sekunden
 
-    @ManyToMany(mappedBy = "songs") // Inverse Seite der Relation
+    @ManyToMany(mappedBy = "songs")
+    @JsonIgnore
     private List<Playlist> playlists; // Befüllt automatisch bei Fetch
 
     public Song() { }
