@@ -1,44 +1,58 @@
 package com.christopher.musikplaylistappchristopher.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.swing.text.TabExpander;
 import java.util.List;
-import java.util.UUID;
 
-@Entity
-@Data // Lombok generiert Getter, Setter etc.
-@Table(name = "SONG")
+/**
+ * Repräsentiert einen Song in der Datenbank.
+ * Diese Entität wird von Hibernate für die Persistenz verwendet.
+ */
+@Entity // JPA-Entität (Datenbank-Tabelle)
+@Data   // Lombok-Annotation: generiert automatisch Getter, Setter, toString, equals, hashCode
+@Table(name = "SONG") // Optional: Setzt explizit den Tabellennamen
 public class Song {
-    @Id
-    @GeneratedValue(generator = "UUID")
+
+    @Id // Primärschlüssel der Tabelle
+    @GeneratedValue(generator = "UUID") // UUID-Generator für eindeutige ID
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "songid", updatable = false, nullable = false)
-    private String songID;
+    @Column(name = "songid", updatable = false, nullable = false) // Datenbankspaltenkonfiguration
+    private String songID; // Eindeutige ID des Songs
 
-    private String title;    // Feld für JSON-Serialisierung und Suchmethoden
-    private String artist;   // Feld für Suchmethoden
-    private String album;    // Feld für Suchmethoden
-    private int duration;    // Spieldauer in Sekunden
+    private String title;    // Songtitel (z. B. für Anzeige oder Suche)
+    private String artist;   // Interpret/Künstler
+    private String album;    // Album, aus dem der Song stammt
+    private int duration;    // Dauer in Sekunden
 
+    /**
+     * Many-to-Many-Beziehung zu Playlist.
+     * Diese Seite ist die inverse Seite, daher "mappedBy".
+     * Die Zuordnung erfolgt über das Feld "songs" in der Playlist-Entität.
+     */
     @ManyToMany(mappedBy = "songs")
-    @JsonIgnore
-    private List<Playlist> playlists; // Befüllt automatisch bei Fetch
+    @JsonIgnore // Verhindert rekursive Serialisierung bei JSON-Ausgabe
+    private List<Playlist> playlists; // Liste der Playlists, in denen der Song vorkommt
 
+    /**
+     * Standard-Konstruktor (wird von JPA benötigt).
+     */
     public Song() { }
 
+    /**
+     * Konstruktor zur Initialisierung eines Songs mit allen relevanten Feldern.
+     * Wird typischerweise in Services, Tests oder beim Erstellen neuer Songs verwendet.
+     */
     public Song(String title, String artist, String album, int duration) {
-        // Konstruktor genutzt in Service oder Tests
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
     }
 
+    // Getter & Setter – notwendig wegen Lombok-Kompatibilität und bei direkter Verwendung
     public String getSongID() {
         return songID;
     }
@@ -87,4 +101,3 @@ public class Song {
         this.playlists = playlists;
     }
 }
-
