@@ -52,4 +52,6 @@ public class SongController {
     public List<Song> createMultipleSongs(@RequestBody List<Song> songs) {
         return songRepository.saveAll(songs); // Mehrere Songs speichern
     }
+
+
 }

@@ -1,5 +1,7 @@
 package com.christopher.musikplaylistappchristopher.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,19 +16,18 @@ public class Playlist {
     private String playlistID; // Wird gesetzt in createPlaylist und in updatePlaylist
 
     private String playlistName;        // Eingabe im createPlaylist (PlaylistController)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate playlistCreation; // Setzung im Controller oder DTO
     private String playlistDescription; // Eingabe im create/Update
     private boolean privacyState;       // Eingabe im create/Update
 
-    @ManyToMany // Relation zu Songs
+
+    @ManyToMany
     @JoinTable(
             name = "playlist_songs",
             joinColumns = @JoinColumn(name = "playlist_id"),
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
-
-    // Getter/Setter: genutzt in PlaylistController, PlaylistSongService und Repository
-
     private List<Song> songs; // Befüllt durch addSongToPlaylist (PlaylistSongService)
     public String getPlaylistID() { return playlistID; }
     public void setPlaylistID(String playlistID) { this.playlistID = playlistID; }
