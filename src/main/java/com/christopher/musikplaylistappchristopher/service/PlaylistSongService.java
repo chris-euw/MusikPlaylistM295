@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service // Business-Logik
@@ -38,6 +39,11 @@ public class PlaylistSongService {
         }
 
         return playlistRepository.save(playlist); // Persistenz durch Repository
+    }
+    public List<Song> getSongsForPlaylist(String playlistId) {
+        return playlistRepository.findById(playlistId)
+                .map(playlist -> playlist.getSongs())
+                .orElseThrow(() -> new IllegalArgumentException("Playlist nicht gefunden"));
     }
 }
 
