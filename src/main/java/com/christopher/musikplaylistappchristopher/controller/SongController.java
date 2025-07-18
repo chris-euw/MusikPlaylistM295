@@ -34,17 +34,22 @@ public class SongController {
         return songRepository.save(song); // repository.save
     }
 
-    // DELETE /api/songs
     @DeleteMapping
     public ResponseEntity<Void> deleteSongs(@RequestBody List<String> ids) {
-        songRepository.deleteAllById(ids); // repository.deleteAllById
+        songRepository.deleteAllById(ids);
         return ResponseEntity.noContent().build();
     }
+
 
     // PUT /api/songs/{id}
     @PutMapping("/{id}")
     public Song updateSong(@PathVariable String id, @RequestBody Song song) {
         song.setSongID(id); // ID beibehalten
         return songRepository.save(song); // repository.save
+    }
+    // POST /api/songs/batch
+    @PostMapping("/batch")
+    public List<Song> createMultipleSongs(@RequestBody List<Song> songs) {
+        return songRepository.saveAll(songs); // Mehrere Songs speichern
     }
 }

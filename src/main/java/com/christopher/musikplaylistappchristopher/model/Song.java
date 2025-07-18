@@ -13,9 +13,10 @@ import java.util.UUID;
 @Table(name = "SONG")
 public class Song {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private String songID;   // ID wird in createSong und updateSong gesetzt
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "songid", updatable = false, nullable = false)
+    private String songID;
 
     private String title;    // Feld für JSON-Serialisierung und Suchmethoden
     private String artist;   // Feld für Suchmethoden
