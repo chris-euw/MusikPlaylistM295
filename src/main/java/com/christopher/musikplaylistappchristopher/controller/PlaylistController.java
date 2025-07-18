@@ -62,6 +62,7 @@ public class PlaylistController {
         playlist.setPlaylistID(id);
         return playlistRepository.save(playlist);
     }
+
     @GetMapping("/{playlistId}/songs")
     public ResponseEntity<List<Song>> getSongsForPlaylist(@PathVariable String playlistId) {
         List<Song> songs = playlistSongService.getSongsForPlaylist(playlistId);
