@@ -2,6 +2,7 @@ package com.christopher.musikplaylistappchristopher.controller;
 
 import com.christopher.musikplaylistappchristopher.dto.FilterDTO;
 import com.christopher.musikplaylistappchristopher.model.Playlist;
+import com.christopher.musikplaylistappchristopher.model.Song;
 import com.christopher.musikplaylistappchristopher.repository.PlaylistRepository;
 import com.christopher.musikplaylistappchristopher.service.PlaylistSongService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,11 @@ public class PlaylistController {
         // ID gesetzt und repository.save aufgerufen
         playlist.setPlaylistID(id);
         return playlistRepository.save(playlist);
+    }
+
+    @GetMapping("/{playlistId}/songs")
+    public ResponseEntity<List<Song>> getSongsForPlaylist(@PathVariable String playlistId) {
+        List<Song> songs = playlistSongService.getSongsForPlaylist(playlistId);
+        return ResponseEntity.ok(songs);
     }
 }
